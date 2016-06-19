@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet to read a topic
+ * Servlet to post a topic
  * @author tayoneda
  *
  */
-@WebServlet(name = "read", urlPatterns = "/read")
-public class ReadServlet extends HttpServlet {
-
+@WebServlet(name = "post", urlPatterns = "/post")
+public class PostServlet extends HttpServlet {
+	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response)
 					throws ServletException, IOException {
@@ -32,11 +32,16 @@ public class ReadServlet extends HttpServlet {
 	protected void perform(HttpServletRequest request,
 			HttpServletResponse response)
 					throws ServletException, IOException {
-		BlogController ctrl = BlogController.getInstance();
-		List<Topic> topics = ctrl.getTopics();
 		
-		request.setAttribute("topics", topics);
-		request.getRequestDispatcher("/read.jsp").forward(request, response);
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		Topic topic = new Topic();
+		topic.setTitle(title);
+		topic.setContent(content);
+		BlogController ctrl = BlogController.getInstance();
+		ctrl.postTopic(topic);
+		
+		request.getRequestDispatcher("/read").forward(request, response);
 	}
 	
 }
